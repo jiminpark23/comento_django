@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Small Business - Start Bootstrap Template</title>
+        <title>Product</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
@@ -28,7 +28,7 @@
                     <hr/>
                     <h1 class="font-weight-light">{{ content.title }}</h1>
                     <p>{{ content.content}}</p>
-                    <a class="btn btn-primary" href="/mysite/{{ content.id }}/">상품 상세보기</a>
+                    <a class="btn btn-primary" href="{% url 'detail' content.id %}">상품 상세보기</a>
                 </div>
             </div>
                 {% endfor %}

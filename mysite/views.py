@@ -1,5 +1,7 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required
 from .models import MainContent
+from .forms import CommentForm
 def index(request):
     content_list = MainContent.objects.order_by('-pub_date')    # -는 역순 정렬
     context = {'content_list': content_list}
@@ -8,4 +10,22 @@ def index(request):
 def detail(request, content_id):
     content_list = get_object_or_404(MainContent, pk=content_id)
     context = {'content_list': content_list}
+    return render(request, 'mysite/content_detail.html', context)
+
+@login_required(login_url='accounts:login')
+def comment_create(request, content_id):
+    content_list = get_object_or_404(MainContent, pk=content_id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.content_list = content_list
+            comment.author = request.user
+            comment.save()
+            return redirect('detail', content_id=content_list.id)
+    else:
+        form = CommentForm()
+
+    context = {'content_list': content_list, 'form': form}
     return render(request, 'mysite/content_detail.html', context)
